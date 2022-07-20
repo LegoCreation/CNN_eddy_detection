@@ -30,8 +30,8 @@ $ mamba install numpy"<1.21" scipy netCDF4 matplotlib opencv pyyaml pint zarr re
 
 $ pip install polygon3
 
-#Install the algorithm package from the download
-$pip install -e . --no-dependencies
+# Install the algorithm package from the download
+$ pip install -e . --no-dependencies
 
 # Create a Kernel for jupyter notebook
 $ mamba install ipykernel
