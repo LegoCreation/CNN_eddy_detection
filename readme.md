@@ -5,9 +5,10 @@
 \--CNN_eddy_detection
         \--static # All python scripts 
         \--notebooks # All jupyter notebooks    
+        \--test #test notebooks or scripts
         -- interpolator.sh                    # interpolator slurm script
         -- README.md
-        -- requirements.txt          # Required flask dependencies to run this program
+        -- requirements.txt          # Required dependencies to run this program
         -- .gitignore    
 ```
 
