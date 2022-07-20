@@ -36,3 +36,5 @@ $ pip install -e . --no-dependencies
 # Create a Kernel for jupyter notebook
 $ mamba install ipykernel
 $ python -m ipykernel install --user --name eddy-tracking --display-name="eddy-tracking"
+
+```
