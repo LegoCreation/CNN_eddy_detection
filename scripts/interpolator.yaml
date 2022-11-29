@@ -1,4 +1,5 @@
 nc_or_nod2d: 1
+bessel_filter: 1
 
 input_path_data_nc: "/work/ollie/nkolduno/output_orca12/ssh.fesom.1961.nc"
 input_path_grid_nc: "/work/ollie/nkolduno/meshes/FORCA12/fesom.mesh.diag.nc"

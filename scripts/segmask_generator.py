@@ -69,7 +69,7 @@ class eddy():
             hours, g = self.data[day-1]
             g.vars['ssh'] = np.ma.array(g.vars['ssh'], mask=np.isnan(g.vars['ssh']))
             g.add_uv("ssh")
-            g.bessel_high_filter("ssh", 500) 
+            #g.bessel_high_filter("ssh", 500) 
             self.hours_since_start_list.append(hours)
             self.grid_list.append(g)
 

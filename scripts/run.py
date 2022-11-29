@@ -9,7 +9,7 @@ import os
 import sys
 import yaml
 
-from function_03 import*
+from interpolator_func import*
 import month_to_year as m2y
 
 #Edit the yaml location for different parameters

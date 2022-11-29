@@ -33,7 +33,7 @@ from filters import bessel_high_filter
 xr.set_options(display_style="text")
 
 class Interpolator:
-    def __init__(self, data_address:str , grid_address: str, year: int, month: int, left: int, right: int, top: int, bottom: int, nod2dfile: str = None, elm2dfile: str = None, nc_flag: int = 1):
+    def __init__(self, data_address:str , grid_address: str, year: int, month: int, left: int, right: int, top: int, bottom: int, nod2dfile: str = None, elm2dfile: str = None, nc_flag: int = 1, bessel_filter: int = 0):
         """
         Initilizer function
         arguments:
@@ -46,6 +46,7 @@ class Interpolator:
         """
 
         self.nc_flag = nc_flag
+        self.bessel_filter = bessel_filter
         self.data = xr.open_dataset(data_address)
         if self.nc_flag:
             self.grid = xr.open_dataset(grid_address)
@@ -201,7 +202,6 @@ class Interpolator:
             data_sample = self.data.ssh[(day+prev_month_days),:].values
             triangularized_data = self.data_triangulation(tri_triang[0], tri_triang[1], data_sample)
             linear_interpolator_list.append(np.ma.masked_invalid(triangularized_data(self.lon2, self.lat2)))
-        self.graph(linear_interpolator_list[0])
         print("1122")
         self.to_netcdf(linear_interpolator_list, out_path, filename, days)
         
@@ -245,7 +245,7 @@ class Interpolator:
         nn_interpolation = []
         for i in range(days):
             nn_interpolation.append(np.ma.masked_invalid(nn_interpolator_list[i]))
-        self.graph(nn_interpolation[0])
+        
         self.to_netcdf(nn_interpolation,out_path, filename, days)
     
     def to_netcdf(self, interpolator_data, out_path, filename, days: int = 30) -> None:
@@ -289,10 +289,11 @@ class Interpolator:
         time.setncattr('unit',time_unit_out)
         
         #Filtered ssh using bessel filter
-        ssh_bessel = fw.createVariable('ssh_bessel',np.float64, ('TIME','LONGITUDE', 'LATITUDE'))
-        ssh_bessel.units = 'm'
-        ssh_bessel.description = 'sea surface elevation bessel filtered'
-        ssh_bessel.long_name = 'sea surface elevation bessel'
+        if self.bessel_filter:
+            ssh_bessel = fw.createVariable('ssh_bessel',np.float64, ('TIME','LONGITUDE', 'LATITUDE'))
+            ssh_bessel.units = 'm'
+            ssh_bessel.description = 'sea surface elevation bessel filtered'
+            ssh_bessel.long_name = 'sea surface elevation bessel'
         
         #Storing co-ordinates
         lon3[:] = self.lon[:]
@@ -305,7 +306,8 @@ class Interpolator:
             ts=Timestamp(times[day])
             t=ts.to_pydatetime()
             ssh[day] = interpolator_data[day][:]
-            ssh_filtered = bessel_high_filter(interpolator_data[day][:], wave_length = 500, y_c = lat_ma, x_c = lon_ma)
+            if self.bessel_filter:
+                ssh_bessel[day] = bessel_high_filter(interpolator_data[day][:], wave_length = 500, y_c = lat_ma, x_c = lon_ma)
             time[day] = date2num(t, time_unit_out)
         
         fw.close()
