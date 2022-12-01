@@ -1,2 +1,2 @@
 # Readme.md
-## example.ipnyb: Contains the usage of interpolator class
+## example.ipynb: Contains the usage of interpolator class
