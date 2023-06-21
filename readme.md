@@ -39,4 +39,4 @@ $ mamba install ipykernel
 $ python -m ipykernel install --user --name eddy-tracking --display-name="eddy-tracking"
 
 ```
-For usage of package please refer to scripts. As notebooks are updated frequently and contain more scratch work so might create confusion. However, going through the notebook once is recommended for gaining better insight of overall process.
+For usage of package please refer to scripts. As notebooks are updated frequently and contain more scratch work, hence might create confusion. However, going through the notebook once is recommended for gaining better insight of overall process.
