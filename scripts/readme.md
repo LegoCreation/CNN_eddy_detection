@@ -4,5 +4,5 @@
 3. Use cnn_training.py for generating the trained weights
 4. Finally use cnn_testing.py for generating the predicted segmentation mask data using the trained weights.
 ## Please correct the time, latitiude and logitude boundries according your data as they are hard-coded in the script.
-##Refer to following pipeline if there is some confusion.
+## Refer to following pipeline if there is some confusion.
 ![Screenshot from 2023-06-21 16-34-37](https://github.com/LegoCreation/CNN_eddy_detection/assets/59442874/5f8cfe11-68c1-4949-b45f-340fe0a1f79b)
