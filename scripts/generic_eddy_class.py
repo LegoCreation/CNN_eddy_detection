@@ -25,19 +25,17 @@ import os
 
 from typing import List, Tuple
 
-class eddy():
-    def __init__(self, dataset_path: str):    
-        self.ds = xr.open_dataset(dataset_path)
+class eddy_detection():
+    def __init__(self, dataset_path: str, lat: list, lon: list):
         self.path = dataset_path
         self.data: List[Tuple] = self.load_data()
         self.hours_since_start_list: list = []
         self.grid_list: List[RegularGridDataset] = []
         self.days_list: list = [] 
-        self.lon = [self.ds["LONGITUDE"].values.min(), self.ds["LONGITUDE"].values.max()]
-        self.lat = [self.ds["LATITUDE"].values.min(), self.ds["LATITUDE"].values.max()]
+        self.lat: list = lat
+        self.lon: list = lon
         self.anticyclonic_list: list = []
         self.cyclonic_list: list = []
-        self.masked_3d_array = None
         return None
     
     def start_axes(self, title):
@@ -56,7 +54,7 @@ class eddy():
 
     def load_data(self):
         grid_collection = GridCollection.from_netcdf_cube(
-            get_demo_path(self.path),
+            self.path,
             "LONGITUDE",
             "LATITUDE",
             "TIME",
@@ -69,7 +67,6 @@ class eddy():
             hours, g = self.data[day-1]
             g.vars['ssh'] = np.ma.array(g.vars['ssh'], mask=np.isnan(g.vars['ssh']))
             g.add_uv("ssh")
-            #g.bessel_high_filter("ssh", 500) 
             self.hours_since_start_list.append(hours)
             self.grid_list.append(g)
 
@@ -81,7 +78,7 @@ class eddy():
         return None
     def detect_eddies(self, min_pixel : int = 30):
         for day in self.days_list:
-            date = datetime(1950, 1 , 1) + timedelta(hours=int(self.hours_since_start_list[day-1])) 
+            date = datetime(1950, 1 , 1) + timedelta(hours=int(self.hours_since_start_list[day-1])) // 1
             a, c = self.grid_list[day-1].eddy_identification("ssh", "u", "v", date, 0.002, pixel_limit=(min_pixel, 2000), shape_error=70)
             self.anticyclonic_list.append(a)
             self.cyclonic_list.append(c)
@@ -96,50 +93,8 @@ class eddy():
             ax.legend()
             self.update_axes(ax)
         return None
-    def generate_pixel_eddy(self, day):
-        g = self.grid_list[day-1]
-        a = self.anticyclonic_list[day-1]
-        c = self.cyclonic_list[day-1]
-        ssh = g.grid("ssh")
-        mask_a = np.zeros(ssh.shape, dtype="bool")
-        x_a_name, y_a_name = a.intern(False)
-        mask_c = np.zeros(ssh.shape, dtype="bool")
-        x_c_name, y_c_name = c.intern(False)
-        lon = g.x_c
-        lon[lon<0] +=360
-        g.x_c =lon
-        for eddy in a:
-            i, j = Path(create_vertice(eddy[x_a_name], eddy[y_a_name])).pixels_in(g)
-            mask_a[i, j] = True
+    
 
-        for eddy in c:
-            i, j = Path(create_vertice(eddy[x_c_name], eddy[y_c_name])).pixels_in(g)
-            mask_c[i, j] = True
-        return mask_a, mask_c
-    def masking(self):
-        masked_anticylonic = []
-        masked_cyclonic = []
-        masked_total = []
-        for day in self.days_list:
-            mask_a, mask_c = self.generate_pixel_eddy(day)
-            masked_anticylonic.append(mask_a)
-            masked_cyclonic.append(mask_c)
-            masked_total.append(2 * mask_a + 1 * mask_c)
-        masked_3d = np.dstack(masked_total)
-        masked_3d = np.rollaxis(masked_3d,-1)
-        return masked_3d
-    def generate_mask(self, outfile: str):
-        last_day = self.ds["TIME"].size
-        days = list(range(1, last_day + 1))
-        self.create_list_dataset(days)
-        self.detect_eddies()
-        self.masked_3d_array = self.masking()
-        ds_seg_mask = self.ds.copy(deep = True)
-        ds_seg_mask["seg_mask"] = ("TIME", "LONGITUDE", "LATITUDE"), self.masked_3d_array
-        if os.path.isfile(outfile):
-            os.remove(outfile)
-        ds_seg_mask.to_netcdf(outfile)
-        return None
     
     
         
