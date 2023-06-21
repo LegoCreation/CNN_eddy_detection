@@ -136,7 +136,7 @@ def using_model(img_size, num_classes, input_dir_X, weight_path):
         for fname in os.listdir(input_dir_X)
     ])
     data_X = xr.open_mfdataset(input_file_paths,combine = 'nested', concat_dim="TIME")
-    data_X = data_X.ssh.to_numpy()[0:10]
+    data_X = data_X.ssh.to_numpy()
     data_X = np.float32(data_X)
 
     data_X[data_X>1000] = 0

@@ -47,7 +47,10 @@ class Interpolator:
 
         self.nc_flag = nc_flag
         self.bessel_filter = bessel_filter
-        self.data = xr.open_dataset(data_address)
+        self.whole_data = xr.open_dataset(data_address)
+        self.year = int(year)
+        self.month = int(month)
+        self.data = self.whole_data.isel(time = (self.whole_data.time.dt.month == self.month))
         if self.nc_flag:
             self.grid = xr.open_dataset(grid_address)
             self.model_lon = self.grid.lon.values
@@ -75,8 +78,12 @@ class Interpolator:
         lon2, lat2 = np.meshgrid(self.lon, self.lat)
         self.lon2 = lon2.T
         self.lat2 = lat2.T
-        self.year = year
-        self.month = month
+        
+        
+#         days_dict = {0:0, 1:31, 2:59 ,3:90, 4:120, 5:151, 6:181, 7:212, 8:243, 9:273, 10:304, 11:334, 12:365}
+#         if not(int(self.year) % 4): #if leap year
+#             days_dict = {0:0, 1:31, 2:60 ,3:91, 4:121, 5:152, 6:182, 7:213, 8:244, 9:274, 10:305, 11:335, 12:366}
+#         self.prev_month_days = days_dict[int(self.month)-1]
 
         
 
@@ -192,14 +199,10 @@ class Interpolator:
         """
         linear_interpolator_list = []
         tri_triang = self.data_triangulation_init()
-        days_dict = {0:0, 1:31, 2:59 ,3:90, 4:120, 5:151, 6:181, 7:212, 8:243, 9:273, 10:304, 11:334, 12:365}
-        if not(int(self.year) % 4):
-            days_dict = {0:0, 1:31, 2:60 ,3:91, 4:121, 5:152, 6:182, 7:213, 8:244, 9:274, 10:305, 11:335, 12:366}
-        prev_month_days = days_dict[int(self.month)-1]
-        days = days_dict[int(self.month)] - prev_month_days
+        days = self.data.time.size
         
         for day in range(days):
-            data_sample = self.data.ssh[(day+prev_month_days),:].values
+            data_sample = self.data.ssh[day,:].values
             triangularized_data = self.data_triangulation(tri_triang[0], tri_triang[1], data_sample)
             linear_interpolator_list.append(np.ma.masked_invalid(triangularized_data(self.lon2, self.lat2)))
         print("1122")
@@ -215,19 +218,15 @@ class Interpolator:
         by default set to 0
         """
         nn_interpolator_list = []
-        #days_dict = {1:31, 2:28 ,3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31}
         
-        days_dict = {0:0, 1:31, 2:59 ,3:90, 4:120, 5:151, 6:181, 7:212, 8:243, 9:273, 10:304, 11:334, 12:365}
-        if not(int(self.year) % 4): #if leap year
-            days_dict = {0:0, 1:31, 2:60 ,3:91, 4:121, 5:152, 6:182, 7:213, 8:244, 9:274, 10:305, 11:335, 12:366}
-        prev_month_days = days_dict[int(self.month)-1]
-        days = days_dict[int(self.month)] - prev_month_days       
+        
+        days = self.data.time.size       
         
         points = np.vstack((self.model_lon, self.model_lat)).T
         
         if mask_flag == 0:
             for day in range(days):
-                data_sample = self.data.ssh[(day+prev_month_days),:].values
+                data_sample = self.data.ssh[day,:].values
                 nn_interpolator = dask.delayed(self.nearest_nei_interpolator)(data_sample, points)
                 nn_interpolator_list.append(nn_interpolator)
                 
@@ -237,7 +236,7 @@ class Interpolator:
             triangularized_data = self.data_triangulation(tri_triang[0], tri_triang[1], data_sample)
             #We can reuse same triangularized_data as mask will be the same for all timesteps
             for day in range(days):
-                data_sample = self.data.ssh[(day+prev_month_days),:].values
+                data_sample = self.data.ssh[day,:].values
                 nn_interpolator = dask.delayed(self.nearest_nei_interpolator_mask)(triangularized_data(self.lon2, self.lat2), data_sample, points)
                 nn_interpolator_list.append(nn_interpolator)
  
@@ -261,8 +260,8 @@ class Interpolator:
         if os.path.isfile(outfile):
             os.remove(outfile)
             
-        times = self.data.coords['time'].values
-        time_unit_out= "hours since " + str(self.year) + "-01-01 00:00:00" #hours in case higher resolution output
+        times = self.data.coords['time'][:].values
+        time_unit_out= "hours since 1950-01-01 00:00:00" #hours in case higher resolution output
         
         fw = Dataset(outfile, 'w')
         
@@ -284,16 +283,16 @@ class Interpolator:
         lon3.units = 'degrees_east'
         lon3.long_name = 'longitude'
         ssh.units = 'm'
-        ssh.description = 'sea surface elevation'
-        ssh.long_name = 'sea surface elevation'
+        
         time.setncattr('unit',time_unit_out)
         
         #Filtered ssh using bessel filter
         if self.bessel_filter:
-            ssh_bessel = fw.createVariable('ssh_bessel',np.float64, ('TIME','LONGITUDE', 'LATITUDE'))
-            ssh_bessel.units = 'm'
-            ssh_bessel.description = 'sea surface elevation bessel filtered'
-            ssh_bessel.long_name = 'sea surface elevation bessel'
+            ssh.description = 'sea surface elevation bessel filtered with 500km'
+            ssh.long_name = 'sea surface elevation bessel filtered'
+        else:
+            ssh.description = 'sea surface elevation'
+            ssh.long_name = 'sea surface elevation'
         
         #Storing co-ordinates
         lon3[:] = self.lon[:]
@@ -305,10 +304,11 @@ class Interpolator:
         for day in range(days): 
             ts=Timestamp(times[day])
             t=ts.to_pydatetime()
-            ssh[day] = interpolator_data[day][:]
             if self.bessel_filter:
-                ssh_bessel[day] = bessel_high_filter(interpolator_data[day][:], wave_length = 500, y_c = lat_ma, x_c = lon_ma)
-            time[day] = date2num(t, time_unit_out)
+                ssh[day] = bessel_high_filter(interpolator_data[day][:], wave_length = 500, y_c = lat_ma, x_c = lon_ma)
+            else:
+                ssh[day] = interpolator_data[day][:]
+            time[day] = date2num(t, time_unit_out) #matlab readable date2num
         
         fw.close()
         return None 

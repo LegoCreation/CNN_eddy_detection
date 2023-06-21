@@ -1,0 +1,17 @@
+nc_or_nod2d: 1
+bessel_filter: 1
+
+input_path_data_nc: "/work/ollie/nkolduno/output_orca12/ssh.fesom.1962.nc"
+input_path_grid_nc: "/work/ollie/nkolduno/meshes/FORCA12/fesom.mesh.diag.nc"
+
+#input_path_nod2dfile: "/work/ollie/nkolduno/meshes/FORCA12/nod2d.out"
+#input_path_elm2dfile: "/work/ollie/nkolduno/meshes/FORCA12/elem2d.out"
+
+input_left: -70
+input_right: 30
+input_top: -60
+input_bottom: -20
+year: 1962
+
+output_path: "/home/ollie/ssunar/ssh_filtered"
+filename: "ssh_filtered_gridded"

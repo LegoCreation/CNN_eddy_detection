@@ -3,10 +3,7 @@ import os
 import xarray as xr
 import yaml
 
-parameters = yaml.safe_load(open('/home/ollie/ssunar/pyfiles/interpolator.yaml'))
 
-output_path = parameters["output_path"]
-filename = parameters["filename"]
 
 def convert(input_dir, output_dir: str, output_file: str):
     input_file_paths = sorted(
@@ -21,4 +18,7 @@ def convert(input_dir, output_dir: str, output_file: str):
     return None
 
 if __name__ == "__main__":
+    parameters = yaml.safe_load(open('/home/ollie/ssunar/CNN_eddy_detection/scripts/interpolator.yaml'))
+    output_path = parameters["output_path"]
+    filename = parameters["filename"]
     convert(input_dir = output_path + "/months", output_dir = output_path, output_file = filename+".nc")

@@ -3,7 +3,7 @@
 """
 Created on Wed Feb  9 10:03:28 2022
 
-@author: =Bivek Panthi, Shishir Sunar
+@author: Bivek Panthi, Shishir Sunar
 """
 import os
 import sys
@@ -13,7 +13,10 @@ from interpolator_func import*
 import month_to_year as m2y
 
 #Edit the yaml location for different parameters
-parameters = yaml.safe_load(open('/home/ollie/ssunar/pyfiles/interpolator.yaml'))
+
+yaml_file = sys.argv[2]
+
+parameters = yaml.safe_load(open(yaml_file))
 
 month = sys.argv[1]
 
