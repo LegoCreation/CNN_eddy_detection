@@ -16,6 +16,6 @@ module load python3/3.7.10_intel2021
 #source activate eddy-tracking
 
 
-srun python3 ~/CNN_eddy_detection/notebooks/cnn.py
+srun python3 ~/CNN_eddy_detection/script/cnn_training.py
 
 
