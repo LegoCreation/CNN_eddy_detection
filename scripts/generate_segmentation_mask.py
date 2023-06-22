@@ -38,6 +38,13 @@ class eddy(eddy_detection):
         a = self.anticyclonic_list[day-1]
         c = self.cyclonic_list[day-1]
         ssh = g.grid("ssh")
+        a.lon[a.lon>180] -= 360
+        a.contour_lon_e[a.contour_lon_e>180] -= 360
+        a.contour_lon_s[a.contour_lon_s>180] -= 360
+
+        c.lon[c.lon>180] -= 360
+        c.contour_lon_e[c.contour_lon_e>180] -= 360
+        c.contour_lon_s[c.contour_lon_s>180] -= 360
         mask_a = np.zeros(ssh.shape, dtype="bool")
         x_a_name, y_a_name = a.intern(False)
         mask_c = np.zeros(ssh.shape, dtype="bool")
