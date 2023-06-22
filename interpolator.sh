@@ -18,7 +18,7 @@ source activate eddy-tracking
 
 
 
-# srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/home/ollie/ssunar/CNN_eddy_detection/scripts/interpolator.yaml"
+srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/home/ollie/ssunar/CNN_eddy_detection/scripts/interpolator.yaml"
 # srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/home/ollie/ssunar/CNN_eddy_detection/scripts/interpolator2.yaml"
 # srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/home/ollie/ssunar/CNN_eddy_detection/scripts/interpolator3.yaml"
 
