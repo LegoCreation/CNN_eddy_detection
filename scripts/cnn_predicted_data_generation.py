@@ -16,10 +16,10 @@ from sklearn.metrics import classification_report
 
 img_size = (1200, 480)
 num_classes = 3
-input_dir_X = "/home/ollie/ssunar/ssh_filtered/months" #input dir for test ssh data
-weight_path = "/home/ollie/ssunar/weights_filter_new/weights" #input dir for trained weights
+input_dir_X = "/albedo/home/ssunar/CNN_eddy_detection/test/months" #input dir for test ssh data
+weight_path = "/albedo/home/ssunar/CNN_eddy_detection/test/weights/weight" #input dir for trained weights
 
-preds_y_filtered = using_model(img_size, num_classes, input_dir_X, weight_path)
-np.save('/home/ollie/ssunar/pred_data.npy', preds_y_filtered)
+pred_seg_mask = using_model(img_size, num_classes, input_dir_X, weight_path)
+np.save('/home/ollie/ssunar/pred_data.npy', pred_seg_mask)
 
 #Saves a 3d matrix of segmentaion mask where the third axis is time

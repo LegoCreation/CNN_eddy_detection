@@ -29,7 +29,10 @@ from typing import List, Tuple
 
 class eddy(eddy_detection):
     def __init__(self, dataset_path: str):    
-        super().__init__(dataset_path)
+        self.ds = xr.open_dataset(dataset_path)
+        lon = [self.ds["LONGITUDE"].values.min(), self.ds["LONGITUDE"].values.max()] 
+        lat = [self.ds["LATITUDE"].values.min(), self.ds["LATITUDE"].values.max()]
+        super().__init__(dataset_path, lat, lon)
         self.masked_3d_array = None
         return None
     
@@ -49,9 +52,6 @@ class eddy(eddy_detection):
         x_a_name, y_a_name = a.intern(False)
         mask_c = np.zeros(ssh.shape, dtype="bool")
         x_c_name, y_c_name = c.intern(False)
-        lon = g.x_c
-        lon[lon<0] +=360
-        g.x_c =lon
         for eddy in a:
             i, j = Path(create_vertice(eddy[x_a_name], eddy[y_a_name])).pixels_in(g)
             mask_a[i, j] = True

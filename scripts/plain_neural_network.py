@@ -139,7 +139,8 @@ def using_model(img_size, num_classes, input_dir_X, weight_path):
     data_X = data_X.ssh.to_numpy()
     data_X = np.float32(data_X)
 
-    data_X[data_X>1000] = 0
+    data_X[data_X>1000] = 0 # Removing outliers or error
+    data_X[data_X<-1000] = 0
     pred_x = np.reshape(data_X,(len(data_X),img_size[0],img_size[1],1))
     model = get_model(img_size, num_classes)
     model.load_weights(weight_path)

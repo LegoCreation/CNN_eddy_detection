@@ -21,11 +21,11 @@ from keras import backend as K
 
 #Importing ssh data
 
-input_dir = "/home/ollie/ssunar/ssh_filtered/months"
+input_dir_ssh = "/albedo/home/ssunar/CNN_eddy_detection/test/months"
 input_file_paths = sorted(
     [
-        os.path.join(input_dir, fname)
-        for fname in os.listdir(input_dir)
+        os.path.join(input_dir_ssh, fname)
+        for fname in os.listdir(input_dir_ssh)
     ])
 #If you want to exclude certain files
 
@@ -48,14 +48,14 @@ X[X<-1000] = 0
 Segmentation mask
 0 - background
 1 - Cyclonic
-2 - Ayclonic
+2 - Antiyclonic
 """
 
-input_dir = "/home/ollie/ssunar/segmentation_masks_3_years"
+input_dir_seg = "/albedo/home/ssunar/CNN_eddy_detection/test/segmentation_masks"
 input_file_paths = sorted(
     [
-        os.path.join(input_dir, fname)
-        for fname in os.listdir(input_dir)
+        os.path.join(input_dir_seg, fname)
+        for fname in os.listdir(input_dir_seg)
     ])
 #If you want to exclude certain files
 
@@ -69,6 +69,7 @@ Y[(Y != 1) & (Y!=2)] = 0 # Removing outliers or error values
 
 
 #Taking 256x256 image sizes of the data to reduce the memory bias as we have data from same region.
+#IMP!!!: The following split is done on the basis that our data dimension is 1200x480
 
 
 temp_x_1 = X[:,0:256, 0:256]
@@ -167,7 +168,7 @@ print("Size of each batch: ",train_gen[1][0].shape)
 
 
 
-file_path_save = "/home/albedo/ssunar/weights_filter_new/weights" #This the name of file where the weights are saved
+file_path_save = "/albedo/home/ssunar/CNN_eddy_detection/test/weights/weight" #This the name of file where the weights are saved
 model.compile(optimizer=Adam(lr=1e-3), loss=dice_coef_loss, metrics=['categorical_accuracy', mean_dice_coef, weighted_mean_dice_coef])
 
 callbacks = [keras.callbacks.ModelCheckpoint(file_path_save, save_best_only=True , monitor='val_loss',save_weights_only=True, save_freq="epoch"),
