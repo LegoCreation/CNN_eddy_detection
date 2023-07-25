@@ -23,15 +23,14 @@ cd CNN_eddy_detection
 $ conda create -n eddy-tracking python=3.8
 $ conda activate eddy-tracking
 
-# mamba can be faster than conda
-$ conda install mamba
 
 # use pip to install PyEddyTracker
 $ pip install pyEddyTracker
 
 # manually install a couple of dependencies
 $ pip install dask
-$ pip/mamba/conda install xarray
+$ pip install xarray
+$ pip install tensorflow
 
 # Create a Kernel for jupyter notebook
 $ mamba install ipykernel
