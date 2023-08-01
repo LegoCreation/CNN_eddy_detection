@@ -87,8 +87,11 @@ class eddy(eddy_detection):
 
 if __name__ == "__main__":
     #Example of generating segmentation mask for a year
+    
+    YEAR = 2015   # TODO remember to change this!
+    
     for i in range(1,13):
-        data_addr_nn = '/home/albedo/ssunar/ssh_filtered/months/ssh_gridded_1961_001_'+str(i).zfill(2)+'_new.nc'
+        data_addr_nn = '/work/ab0995/b382485/eddy_data/output_path/months/ssh_gridded_' + YEAR + '_001_'+str(i).zfill(2)+'_new.nc'
         eddy_instance = eddy(dataset_path=data_addr_nn)
-        outfile = "/home/albedo/ssunar/segmentation_masks/seg_mask_gridded_1961_001_"+str(i).zfill(2)+"_new.nc"
+        outfile = "/work/ab0995/b382485/eddy_data/segmentation_masks/seg_mask_gridded_" + YEAR + "_001_"+str(i).zfill(2)+"_new.nc"
         eddy_instance.generate_mask(outfile)
