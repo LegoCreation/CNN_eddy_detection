@@ -33,6 +33,7 @@ input_top = parameters["input_top"]
 input_bottom = parameters["input_bottom"]
 year = parameters["year"]
 filename = parameters["filename"]
+bessel_filter = parameters['bessel_filter']
 
 output_path_months = parameters["output_path"] + "/months"
 if not os.path.isdir(output_path_months):
@@ -60,7 +61,7 @@ else:
         print(input_path_elm2dfile, "doesn't exist!")
         sys.exit(1)
 
-interpolator_object = Interpolator(input_path_data_nc, input_path_grid_nc, year, month, input_left, input_right, input_top, input_bottom, input_path_nod2dfile, input_path_elm2dfile, nc_or_nod2d)
+interpolator_object = Interpolator(input_path_data_nc, input_path_grid_nc, year, month, input_left, input_right, input_top, input_bottom, input_path_nod2dfile, input_path_elm2dfile, nc_or_nod2d, bessel_filter)
 interpolator_object.nn_interpolation_action(output_path_months, filename, mask_flag = 1)
 
 
