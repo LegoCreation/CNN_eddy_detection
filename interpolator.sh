@@ -1,15 +1,15 @@
 #!/bin/bash
 #SBATCH --job-name=interpolator    # Specify job name
 #SBATCH --partition=shared         # Specify partition name
-#SBATCH --mem=50G                  # Specify amount of memory needed
-#SBATCH --time=04:00:00
+#SBATCH --mem=30G                  # Specify amount of memory needed
+#SBATCH --time=01:00:00
 #SBATCH --account=ab0995           # Charge resources on this project account
 #SBATCH --output=output_interpolator.log
 #SBATCH --array=1-12               # job array index for each month
 
-##SBATCH --mail-type=end
-##SBATCH --mail-type=fail
-##SBATCH --mail-user=massimiliano.fronza@unitn.it
+#SBATCH --mail-type=end
+#SBATCH --mail-type=fail
+#SBATCH --mail-user=massimiliano.fronza@unitn.it
 
 source ~/.bashrc
 conda activate eddy-tracking
