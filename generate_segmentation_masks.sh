@@ -7,9 +7,9 @@
 #SBATCH --output=output_masks_generator.log
 #SBATCH --array=1-12               # job array index for each month
 
-##SBATCH --mail-type=end
-##SBATCH --mail-type=fail
-##SBATCH --mail-user=massimiliano.fronza@unitn.it
+#SBATCH --mail-type=end
+#SBATCH --mail-type=fail
+#SBATCH --mail-user=massimiliano.fronza@unitn.it
 
 source ~/.bashrc
 conda activate eddy-tracking
