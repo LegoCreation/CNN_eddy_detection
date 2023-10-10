@@ -7,13 +7,13 @@ input_path_grid_nc: "/albedo/home/ssunar/fesom.mesh.diag.nc"
 #input_path_nod2dfile: "/work/ollie/nkolduno/meshes/FORCA12/nod2d.out"
 #input_path_elm2dfile: "/work/ollie/nkolduno/meshes/FORCA12/elem2d.out"
 
-input_left: -70
-input_right: 30
-input_top: -60
-input_bottom: -20
+input_left: -60
+input_right: -10
+input_top: -30
+input_bottom: -55
 year: 1961
 
-output_path: "/albedo/home/ssunar/CNN_eddy_detection/test"
-filename: "ssh_filtered_gridded"
+output_path: "/albedo/home/ssunar/CNN_eddy_detection/for_paper/interpolation/Gulfstream"
+filename: "Gulfstream"
 
 
