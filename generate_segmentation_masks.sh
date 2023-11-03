@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=masks_generator    # Specify job name
 #SBATCH --partition=shared         # Specify partition name
-#SBATCH --mem=50G                  # Specify amount of memory needed
-#SBATCH --time=04:00:00
+#SBATCH --mem=30G                  # Specify amount of memory needed
+#SBATCH --time=00:30:00
 #SBATCH --account=ab0995           # Charge resources on this project account
 #SBATCH --output=output_masks_generator.log
 #SBATCH --array=1-12               # job array index for each month
