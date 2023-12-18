@@ -37,7 +37,8 @@ bessel_filter = parameters['bessel_filter']
 
 output_path_months = parameters["output_path"] + "/months"
 if not os.path.isdir(output_path_months):
-    os.mkdir(output_path_months)
+    os.makedirs(output_path_months, exist_ok=True)
+    # os.mkdir(output_path_months)
 
 
 
