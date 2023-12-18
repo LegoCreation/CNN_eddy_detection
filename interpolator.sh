@@ -21,9 +21,17 @@ conda activate eddy-tracking
 
 
 
-srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/home/ollie/ssunar/CNN_eddy_detection/scripts/interpolator.yaml"
-# srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/home/ollie/ssunar/CNN_eddy_detection/scripts/interpolator2.yaml"
-# srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/home/ollie/ssunar/CNN_eddy_detection/scripts/interpolator3.yaml"
+srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/albedo/home/ssunar/CNN_eddy_detection/yaml_files/interpolator_2009.yaml"
+srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/albedo/home/ssunar/CNN_eddy_detection/yaml_files/interpolator_2010.yaml"
+srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/albedo/home/ssunar/CNN_eddy_detection/yaml_files/interpolator_2011.yaml"
+srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/albedo/home/ssunar/CNN_eddy_detection/yaml_files/interpolator_2012.yaml"
+srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/albedo/home/ssunar/CNN_eddy_detection/yaml_files/interpolator_2013.yaml"
+srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/albedo/home/ssunar/CNN_eddy_detection/yaml_files/interpolator_2014.yaml"
+srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/albedo/home/ssunar/CNN_eddy_detection/yaml_files/interpolator_2015.yaml"
+srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/albedo/home/ssunar/CNN_eddy_detection/yaml_files/interpolator_2016.yaml"
+srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/albedo/home/ssunar/CNN_eddy_detection/yaml_files/interpolator_2017.yaml"
+srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/albedo/home/ssunar/CNN_eddy_detection/yaml_files/interpolator_2018.yaml"
+srun python3 ~/CNN_eddy_detection/scripts/run.py ${SLURM_ARRAY_TASK_ID} "/albedo/home/ssunar/CNN_eddy_detection/yaml_files/interpolator_2019.yaml"
 
 #srun python3 run.py '/work/ollie/nkolduno/output_orca12/ssh.fesom.1963.nc' '/work/ollie/nkolduno/meshes/FORCA12/fesom.mesh.diag.nc' '/work/ollie/nkolduno/meshes/FORCA12/nod2d.out' '/work/ollie/nkolduno/meshes/FORCA12/elem2d.out' 1963 ${SLURM_ARRAY_TASK_ID} -70 30 -60 -20 0
 #srun python3 run.py '/work/ollie/nkolduno/output_orca12/ssh.fesom.1961.nc' '/work/ollie/nkolduno/meshes/FORCA12/fesom.mesh.diag.nc' '/home/ollie/vamuelle/pyfesom2/tests/data/pi-grid/nod2d.out'  1961 ${SLURM_ARRAY_TASK_ID} -70 30 -60 -20 0 &

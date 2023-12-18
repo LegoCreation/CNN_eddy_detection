@@ -1,25 +1,4 @@
-Module for Python 3.7 from Intel Parallel Studio 2021 loaded
-Intel(R) Extension for Scikit-learn* enabled (https://github.com/intel/scikit-learn-intelex)
-In /global/AWIsoft/intel/2021/intelpython/python3.7/lib/python3.7/site-packages/matplotlib/mpl-data/stylelib/_classic_test.mplstyle: 
-The text.latex.preview rcparam was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
-In /global/AWIsoft/intel/2021/intelpython/python3.7/lib/python3.7/site-packages/matplotlib/mpl-data/stylelib/_classic_test.mplstyle: 
-The mathtext.fallback_to_cm rcparam was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
-In /global/AWIsoft/intel/2021/intelpython/python3.7/lib/python3.7/site-packages/matplotlib/mpl-data/stylelib/_classic_test.mplstyle: Support for setting the 'mathtext.fallback_to_cm' rcParam is deprecated since 3.3 and will be removed two minor releases later; use 'mathtext.fallback : 'cm' instead.
-In /global/AWIsoft/intel/2021/intelpython/python3.7/lib/python3.7/site-packages/matplotlib/mpl-data/stylelib/_classic_test.mplstyle: 
-The validate_bool_maybe_none function was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
-In /global/AWIsoft/intel/2021/intelpython/python3.7/lib/python3.7/site-packages/matplotlib/mpl-data/stylelib/_classic_test.mplstyle: 
-The savefig.jpeg_quality rcparam was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
-In /global/AWIsoft/intel/2021/intelpython/python3.7/lib/python3.7/site-packages/matplotlib/mpl-data/stylelib/_classic_test.mplstyle: 
-The keymap.all_axes rcparam was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
-In /global/AWIsoft/intel/2021/intelpython/python3.7/lib/python3.7/site-packages/matplotlib/mpl-data/stylelib/_classic_test.mplstyle: 
-The animation.avconv_path rcparam was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
-In /global/AWIsoft/intel/2021/intelpython/python3.7/lib/python3.7/site-packages/matplotlib/mpl-data/stylelib/_classic_test.mplstyle: 
-The animation.avconv_args rcparam was deprecated in Matplotlib 3.3 and will be removed two minor releases later.
-Traceback (most recent call last):
-  File "/home/ollie/ssunar/CNN_eddy_detection/notebooks/cnn.py", line 29, in <module>
-    data_x = data_x.ssh.to_numpy()
-  File "/global/AWIsoft/intel/2021/intelpython/python3.7/lib/python3.7/site-packages/xarray/core/common.py", line 240, in __getattr__
-    "{!r} object has no attribute {!r}".format(type(self).__name__, name)
-AttributeError: 'DataArray' object has no attribute 'to_numpy'
-srun: error: prod-0060: task 0: Exited with exit code 1
-srun: Terminating job step 21871223.0
+Module for mambaforge version 22.9.0-2-Linux-x86_64 loadedModule for mambaforge version 22.9.0-2-Linux-x86_64 loaded
+
+Module for mesa version 22.0.2 loaded
+Module for mesa version 22.0.2 loaded

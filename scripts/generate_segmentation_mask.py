@@ -23,6 +23,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.cm as cm
 import os
+from pathlib import Path as path
+
 
 
 from typing import List, Tuple
@@ -87,8 +89,22 @@ class eddy(eddy_detection):
 
 if __name__ == "__main__":
     #Example of generating segmentation mask for a year
-    for i in range(1,13):
-        data_addr_nn = '/home/albedo/ssunar/ssh_filtered/months/ssh_gridded_1961_001_'+str(i).zfill(2)+'_new.nc'
-        eddy_instance = eddy(dataset_path=data_addr_nn)
-        outfile = "/home/albedo/ssunar/segmentation_masks/seg_mask_gridded_1961_001_"+str(i).zfill(2)+"_new.nc"
-        eddy_instance.generate_mask(outfile)
+    # for i in range(1,13):
+    #     data_addr_nn = '/home/albedo/ssunar/ssh_filtered/months/ssh_gridded_1961_001_'+str(i).zfill(2)+'_new.nc'
+    #     eddy_instance = eddy(dataset_path=data_addr_nn)
+    #     outfile = "/home/albedo/ssunar/segmentation_masks/seg_mask_gridded_1961_001_"+str(i).zfill(2)+"_new.nc"
+    #     eddy_instance.generate_mask(outfile)
+
+    # For generating segmentation masks for Paper
+    regions_list = ["Gulfstream"]
+    years = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"]
+    for region_ in regions_list:
+        os.makedirs(f"/albedo/work/user/ssunar/for_paper/segmentation_masks/{region_}", exist_ok=True)
+        for year in years:
+            for month in range(1,13):
+                data_addr_nn = f"/albedo/work/user/ssunar/for_paper/interpolation/{region_}/interpolation_{year}_001_"+str(month).zfill(2)+".nc"
+                interpolation_data_file_path = path(data_addr_nn)
+                if interpolation_data_file_path.is_file():
+                    eddy_instance = eddy(dataset_path=data_addr_nn)
+                    outfile = f"/albedo/work/user/ssunar/for_paper/segmentation_masks/{region_}/seg_mask_gridded_{year}_001_"+str(month).zfill(2)+"_new.nc"
+                    eddy_instance.generate_mask(str(outfile))
