@@ -20,17 +20,24 @@ git clone https://github.com/LegoCreation/CNN_eddy_detection
 cd CNN_eddy_detection
 
 # Create environment to work in and activate it
-$ conda create -n eddy-tracking python=3.8
+$ conda create -n eddy-tracking python=3.8.16
 $ conda activate eddy-tracking
 
 
 # use pip to install PyEddyTracker
-$ pip install pyEddyTracker
+$ pip install pyEddyTracker==3.6.1
 
-# manually install a couple of dependencies
-$ pip install dask
-$ pip install xarray
-$ pip install tensorflow
+# manually install/uninstall a couple of dependencies
+$ pip uninstall pymc3
+$ pip uninstall pymc-learn
+$ pip install -r pip_requirements.txt
+$ pip install xarray==2022.11.0
+$ pip install numpy==1.21.0
+$ pip install zarr==2.13.3
+$ pip install dask==2023.2.0
+
+## For tensorflow numpy==1.24.3 is required but for py-eddy-tracker numpy==1.21.0 is required. Hence cannot be used simultaneouly.
+
 
 # Create a Kernel for jupyter notebook
 $ mamba install ipykernel
