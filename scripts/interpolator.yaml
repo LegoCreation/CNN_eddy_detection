@@ -1,18 +1,17 @@
 nc_or_nod2d: 1 # 1 means nc format file
 bessel_filter: 1
 
-input_path_data_nc: "/work/ab0995/a270088/sisters/runs/F12/ssh.fesom.2009.nc"
-input_path_grid_nc: "/work/ab0995/a270088/meshes/FORCA12/fesom.mesh.diag.nc"
+input_path_data_nc: "/albedo/home/ssunar/ssh.fesom.1961.nc"
+input_path_grid_nc: "/albedo/home/ssunar/fesom.mesh.diag.nc"
 
-input_left: -70
-input_right: -20
-#30
-input_top: -60
-input_bottom: -40
-#-20
-year: 2009
+#input_path_nod2dfile: "/work/ollie/nkolduno/meshes/FORCA12/nod2d.out"
+#input_path_elm2dfile: "/work/ollie/nkolduno/meshes/FORCA12/elem2d.out"
 
-output_path: "/work/ab0995/b382485/eddy_data/reduced_roi/output_path"
-filename: "ssh_filtered_gridded"
+input_left: -60
+input_right: -10
+input_top: -30
+input_bottom: -55
+year: 1961
 
-segmentation_masks_path: "/work/ab0995/b382485/eddy_data/reduced_roi/segmentation_masks"
+output_path: "/albedo/home/ssunar/CNN_eddy_detection/for_paper/interpolation/Gulfstream"
+filename: "seg_mask_gridded"

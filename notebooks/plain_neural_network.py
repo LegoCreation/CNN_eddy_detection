@@ -10,8 +10,9 @@ import numpy as np
 from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras import layers
 from keras.layers import Conv2D, MaxPooling2D, concatenate, UpSampling2D, BatchNormalization, Activation, SeparableConv2D, Conv2DTranspose, Reshape, Dropout
+from tensorflow.keras.utils import to_categorical
 import numpy as np
-from keras.utils import np_utils
+import np_utils
 import os
 import xarray as xr
 
@@ -82,7 +83,7 @@ class plain_net_eddy(keras.utils.Sequence):
             x[i] = np.expand_dims(batch_input_img[i], 2)
             y[i] = np.expand_dims(batch_target_img[i], 2)
             
-        y = np_utils.to_categorical(np.reshape(y[:,:,:,0],(self.batch_size,self.img_size[0]*self.img_size[1])),3)
+        y = to_categorical(np.reshape(y[:,:,:,0],(self.batch_size,self.img_size[0]*self.img_size[1])),3)
         return x, y
 
 def get_model(img_size, num_classes):
@@ -91,7 +92,7 @@ def get_model(img_size, num_classes):
     
     for_concat = []
     p = inputs
-    for index, dropout_filter in zip(range(1,5,1),[(0.2,16),(0.3,16),(0.4,32),(0.5,32)]): 
+    for index, dropout_filter in zip(range(1,5,1),[(0.2,8),(0.3,16),(0.4,16),(0.5,32)]): 
         x = layers.SeparableConv2D(dropout_filter[1], 3, padding="same", use_bias=False)(p)
         x = layers.BatchNormalization()(x)
         x = layers.Activation("relu")(x)
@@ -107,7 +108,7 @@ def get_model(img_size, num_classes):
         elif index==4:
             p = x
 
-    for index, dropout_filter in zip(range(3,0,-1),[(0.4,32),(0.3,16),(0.2,16)]):
+    for index, dropout_filter in zip(range(3,0,-1),[(0.4,16),(0.3,16),(0.2,8)]):
         x = concatenate([UpSampling2D((2,2))(p), for_concat[index-1]])
         x = SeparableConv2D(dropout_filter[1], 3, padding="same", use_bias=False)(x) 
         x = BatchNormalization()(x)
@@ -138,14 +139,37 @@ def using_model(img_size, num_classes, input_dir_X, weight_path):
     data_X = xr.open_mfdataset(input_file_paths,combine = 'nested', concat_dim="TIME")
     data_X = data_X.ssh.to_numpy()
     data_X = np.float32(data_X)
-
     data_X[data_X>1000] = 0
-    pred_x = np.reshape(data_X,(len(data_X),img_size[0],img_size[1],1))
-    model = get_model(img_size, num_classes)
+    
+    pad_rows = (8 - img_size[0] % 8) % 8
+    pad_cols = (8 - img_size[1] % 8) % 8
+    data_X = np.pad(data_X, ((0, 0), (0, pad_rows), (0, pad_cols)), mode='constant')
+    new_img_size_rows, new_img_size_colm = img_size[0]+pad_rows, img_size[1]+pad_cols   
+    
+    pred_x = np.reshape(data_X,(len(data_X),new_img_size_rows,new_img_size_colm,1))
+    model = get_model((new_img_size_rows, new_img_size_colm), num_classes)
     model.load_weights(weight_path)
     preds_y = model.predict(pred_x)
-    mask = np.argmax(np.reshape(preds_y,(len(data_X),img_size[1],img_size[0],num_classes)), axis=-1)
-    preds_y = np.reshape(mask,(len(data_X), img_size[0],img_size[1]))
+    mask = np.argmax(np.reshape(preds_y,(len(data_X),new_img_size_rows, new_img_size_colm, num_classes)), axis=-1)
+    preds_y = np.reshape(mask,(len(data_X), new_img_size_rows, new_img_size_colm))
+    preds_y = preds_y[:, 0:img_size[0], 0:img_size[1]]
+    return preds_y
+
+def using_model_(img_size, num_classes, data_X, weight_path):
+    data_X[data_X>1000] = 0
+    
+    pad_rows = (8 - img_size[0] % 8) % 8
+    pad_cols = (8 - img_size[1] % 8) % 8
+    data_X = np.pad(data_X, ((0, 0), (0, pad_rows), (0, pad_cols)), mode='constant')
+    new_img_size_rows, new_img_size_colm = img_size[0]+pad_rows, img_size[1]+pad_cols   
+    
+    pred_x = np.reshape(data_X,(len(data_X),new_img_size_rows,new_img_size_colm,1))
+    model = get_model((new_img_size_rows, new_img_size_colm), num_classes)
+    model.load_weights(weight_path)
+    preds_y = model.predict(pred_x)
+    mask = np.argmax(np.reshape(preds_y,(len(data_X),new_img_size_rows, new_img_size_colm, num_classes)), axis=-1)
+    preds_y = np.reshape(mask,(len(data_X), new_img_size_rows, new_img_size_colm))
+    preds_y = preds_y[:, 0:img_size[0], 0:img_size[1]]
     return preds_y
 
 # Free up RAM in case the model definition cells were run multiple times

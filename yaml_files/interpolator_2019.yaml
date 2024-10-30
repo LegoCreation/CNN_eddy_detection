@@ -1,0 +1,16 @@
+nc_or_nod2d: 1 # 1 means nc format file
+bessel_filter: 1
+
+input_path_data_nc: "/albedo/work/user/vamuelle/forca12/ssh.fesom.2019.nc"
+input_path_grid_nc: "/albedo/work/user/vamuelle/forca12/fesom.mesh.diag.nc"
+
+input_left: -60
+input_right: -10
+input_top: 30
+input_bottom: 55
+year: 2019
+
+output_path: "/albedo/work/user/ssunar/for_paper/interpolation/Gulfstream"
+filename: "interpolation"
+
+
