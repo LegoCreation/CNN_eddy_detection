@@ -1,1 +1,4 @@
 *.nc
+scripts/.ipynb_checkpoints/
+scripts/__pycache__/
+yaml_files/.ipynb_checkpoints/
