@@ -13,7 +13,7 @@ input_top: -30
 input_bottom: -55
 year: 1961
 
-output_path: "/albedo/home/ssunar/CNN_eddy_detection/for_paper/interpolation/Gulfstream"
+output_path: "/albedo/home/ssunar/tempo"
 filename: "seg_mask_gridded"
 
 
