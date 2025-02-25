@@ -14,7 +14,7 @@ def run_script(config_name, month, script_name="run.py"):
 # pass here the .yaml file to use for this year
 configuration = sys.argv[1]
 
-# create the first 6 months and then the last 6 to avoid using too much memory
+# create the first 4 months and then the others to avoid using too much memory
 for i in [0, 4, 8]:
     
     processes = []
