@@ -9,7 +9,7 @@ import random
 from sklearn import preprocessing
 from keras.callbacks import History
 import matplotlib.pyplot as plt
-from keras.utils import np_utils
+import np_utils
 import os
 from tensorflow.keras.optimizers import Adam
 from plain_neural_network import*
@@ -21,7 +21,8 @@ from keras import backend as K
 
 #Importing ssh data
 
-input_dir_ssh = "/albedo/home/ssunar/CNN_eddy_detection/test/months"
+#input_dir_ssh = "/albedo/home/ssunar/CNN_eddy_detection/test/months"
+input_dir_ssh = "/ceph/hpc/home/ciangottinid/FESOM2/output_path/months"
 input_file_paths = sorted(
     [
         os.path.join(input_dir_ssh, fname)
@@ -51,7 +52,8 @@ Segmentation mask
 2 - Antiyclonic
 """
 
-input_dir_seg = "/albedo/home/ssunar/CNN_eddy_detection/test/segmentation_masks"
+#input_dir_seg = "/albedo/home/ssunar/CNN_eddy_detection/test/segmentation_masks"
+input_dir_seg = "/ceph/hpc/home/ciangottinid/FESOM2/segmentation_masks"
 input_file_paths = sorted(
     [
         os.path.join(input_dir_seg, fname)
@@ -97,7 +99,7 @@ print("Shape of data Y:",data_y.shape)
 img_size = (256, 256)
 num_classes = 3
 batch_size = 16
-epochs = 60
+epochs = 1
 total_samples = len(data_x)
 print(total_samples)
 
@@ -167,9 +169,11 @@ val_gen = plain_net_eddy(batch_size, img_size, val_input, val_target)
 print("Size of each batch: ",train_gen[1][0].shape)
 
 
+# path destination of the trained weights
+#file_path_save = "/albedo/home/ssunar/CNN_eddy_detection/test/weights/weight"
+file_path_save = "/ceph/hpc/home/ciangottinid/CNN_eddy_detection/test/intertwin.weights.h5"
 
-file_path_save = "/albedo/home/ssunar/CNN_eddy_detection/test/weights/weight" #This the name of file where the weights are saved
-model.compile(optimizer=Adam(lr=1e-3), loss=dice_coef_loss, metrics=['categorical_accuracy', mean_dice_coef, weighted_mean_dice_coef])
+model.compile(optimizer=Adam(learning_rate=1e-3), loss=dice_coef_loss, metrics=['categorical_accuracy', mean_dice_coef, weighted_mean_dice_coef])
 
 callbacks = [keras.callbacks.ModelCheckpoint(file_path_save, save_best_only=True , monitor='val_loss',save_weights_only=True, save_freq="epoch"),
             keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=10, verbose=1, mode='auto', min_delta=1e-30, min_lr=1e-30)]
