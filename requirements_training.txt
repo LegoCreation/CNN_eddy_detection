@@ -1,0 +1,11 @@
+ipykernel==6.15.2
+PyYAML==6.0.2
+xarray==2023.12.0
+dask==2024.9.0
+matplotlib==3.8.4
+scikit-learn==1.6.1
+netcdf4==1.5.8
+opencv-python-headless==4.10.0.84
+tensorflow[and-cuda]==2.16.*
+tf_keras==2.16.*
+np_utils==0.6.0
