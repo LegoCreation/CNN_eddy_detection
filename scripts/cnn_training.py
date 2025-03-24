@@ -13,7 +13,8 @@ import np_utils
 import os
 from tensorflow.keras.optimizers import Adam
 from plain_neural_network import*
-from keras import backend as K
+import tensorflow.keras.backend as K
+
 
 
 #---------------Data Preprocessing-------------#
@@ -99,7 +100,7 @@ print("Shape of data Y:",data_y.shape)
 img_size = (256, 256)
 num_classes = 3
 batch_size = 16
-epochs = 1
+epochs = 60
 total_samples = len(data_x)
 print(total_samples)
 
@@ -139,10 +140,13 @@ def dice_coef_nn(y_true, y_pred):
     return (2 * intersection_nn + smooth) / (K.sum(y_true_nn) + K.sum(y_pred_nn) + smooth)
     
 def mean_dice_coef(y_true, y_pred):
+    y_true = K.cast(y_true, dtype="float32")
+    y_pred = K.cast(y_pred, dtype="float32")
     return (dice_coef_anti(y_true, y_pred) + dice_coef_cyc(y_true, y_pred) + dice_coef_nn(y_true, y_pred))/3.
 
 def weighted_mean_dice_coef(y_true, y_pred):
-    #return (weightsSeg[2]*dice_coef_anti(y_true, y_pred) + weightsSeg[1]*dice_coef_cyc(y_true, y_pred) + weightsSeg[0]*dice_coef_nn(y_true, y_pred))
+    y_true = K.cast(y_true, dtype="float32")
+    y_pred = K.cast(y_pred, dtype="float32")
     return (weightsSeg[2]*dice_coef_anti(y_true, y_pred) + weightsSeg[1]*dice_coef_cyc(y_true, y_pred) + weightsSeg[0]*dice_coef_nn(y_true, y_pred))
       
 def dice_coef_loss(y_true, y_pred):
